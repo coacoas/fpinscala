@@ -50,19 +50,55 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
 
-  def tail[A](l: List[A]): List[A] = ???
+  def tail[A](l: List[A]): List[A] = l match {
+    case Nil => sys.error("tail of an empty list")
+    case Cons(_, t) => t
+  }
 
-  def setHead[A](l: List[A], h: A): List[A] = ???
+  def setHead[A](l: List[A], h: A): List[A] = l match {
+    case Nil => sys.error("setHead on an empty list")
+    case Cons(_, t) => Cons(h, t)
+  }
 
-  def drop[A](l: List[A], n: Int): List[A] = ???
+  def drop[A](l: List[A], n: Int): List[A] = {
+    if (n == 0) l
+    else if (l == Nil) l
+    else drop(tail(l), n - 1)
+  }
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = ???
+  @annotation.tailrec
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(h, t) if f(h) => t
+    case Cons(_, t) => dropWhile(t, f)
+  }
 
-  def init[A](l: List[A]): List[A] = ???
+  def init[A](l: List[A]): List[A] = l match {
+    case Nil => sys.error("init on an empty list")
+    case Cons(_, Nil) => Nil
+    case Cons(h, t) => Cons(h, init(t))
+  }
 
-  def length[A](l: List[A]): Int = ???
+  def length[A](l: List[A]): Int = {
+    @annotation.tailrec
+    def loop(remaining: List[A], count: Int): Int = remaining match {
+      case Nil => count
+      case Cons(_, t) => loop(t, count +1)
+    }
+    loop(l, 0)
+  }
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = {
+    @annotation.tailrec
+    def loop(acc: B, remaining: List[A]): B = remaining match {
+      case Nil => acc
+      case Cons(h, t) => loop(f(acc, h), t)
+    }
+    loop(z, l)
+  }
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = ???
+  def map[A,B](l: List[A])(f: A => B): List[B] = l match {
+    case Nil => Nil
+    case Cons(h, t) => Cons(f(h), map(t)(f))
+  }
 }
