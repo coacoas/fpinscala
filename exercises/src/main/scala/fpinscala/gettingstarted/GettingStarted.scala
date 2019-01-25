@@ -36,6 +36,7 @@ object MyModule {
 
   // Exercise 1: Write a function to compute the nth fibonacci number
 
+
   def fib(n: Int): Int = ???
 
   // This definition and `formatAbs` are very similar..

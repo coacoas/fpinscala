@@ -302,10 +302,10 @@ object List { // `List` companion object. Contains functions for creating and wo
   loops early. In Chapter 5 we'll discuss ways of composing functions
   like this from simpler components, without giving up the efficiency
   of having the resulting functions work in one pass over the data.
-  
+
   It's good to specify some properties about these functions.
   For example, do you expect these expressions to be true?
-  
+
   (xs append ys) startsWith xs
   xs startsWith Nil
   (xs append ys append zs) hasSubsequence ys
